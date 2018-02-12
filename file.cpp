@@ -1,13 +1,6 @@
-#include<SDL2/SDL.h>
-#include<string>
-#include<fstream>
-#include<iostream>
+#include"file.h"
 
 using namespace std;
-
-int G_ErrorLogger(string cause){//given a name output the last error of sdl
-	cout<<cause<<": "<<SDL_GetError()<<endl;
-}
 
 int main(int argc,char* argv[]){
 	if(SDL_Init(SDL_INIT_EVERYTHING)!=0){//init sdl, print error otherwise 
