@@ -39,6 +39,8 @@ int main(int argc,char* argv[]){
 	}
 	
 	string TextInBox="";
+	G_ClearBox(Renderer);
+	
 	
 	SDL_Event Event;
 	bool Done=false;
@@ -52,7 +54,7 @@ int main(int argc,char* argv[]){
 			continue;
 		}
 		if(Event.type==SDL_KEYDOWN&&Event.key.keysym.sym==SDLK_BACKSPACE){
-			if(TextInBox.lenght()>0){
+			if(TextInBox.length()>0){
 				TextInBox.pop_back();
 			}
 			continue;
