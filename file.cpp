@@ -7,6 +7,11 @@ int main(int argc,char* argv[]){
 		G_ErrorLogger("init");
 		return 3;
 	}
+	if(TTF_Init()!=0){
+		cout<<"error initializing ttf:"<<TTF_GetError()<<endl;
+		SDL_Quit();
+		return 3;
+	}
 	
 	const int G_ScreenWidth=640;
 	const int G_ScreenHeight=480;
@@ -38,9 +43,10 @@ int main(int argc,char* argv[]){
 		return 1;
 	}
 	
+	/*
+	//old way
 	string TextInBox="";
 	G_ClearBox(Renderer);
-	
 	
 	SDL_Event Event;
 	bool Done=false;
@@ -64,11 +70,45 @@ int main(int argc,char* argv[]){
 			continue;
 		}
 	}
+	*/
+	SDL_SetRenderDrawColor(Renderer,192,192,192,255);
+	SDL_RenderClear(Renderer);
+	SDL_RenderPresent(Renderer);
+
+	
+	//oop way
+	G_TextBox TextBox;
+	TextBox.SetFontToHeight("font.ttf");
+	SDL_RenderClear(Renderer);
+	TextBox.Update(Renderer);
+	SDL_Event Event;
+	bool Done=false;
+	while(!Done){//event handler
+		while(SDL_PollEvent(&Event)){
+				if(Event.type==SDL_QUIT){
+					Done=true;
+					break;
+				}
+				if(Event.type==SDL_KEYDOWN&&Event.key.keysym.sym==SDLK_BACKSPACE){
+					TextBox.EraseOneChar();
+					SDL_RenderClear(Renderer);
+					TextBox.Update(Renderer);
+					continue;
+				}
+				if(Event.type==SDL_TEXTINPUT){
+					TextBox.AppendText(Event.text.text);
+					SDL_RenderClear(Renderer);
+					TextBox.Update(Renderer);
+					continue;
+				}
+		}
+	}
+	
+	//Free memory and exit
+	TextBox.CloseFont();
+	SDL_DestroyRenderer(Renderer);
+	SDL_DestroyWindow(Window);
+	TTF_Quit();
+	SDL_Quit();
 	return 0;
-	
-	
-	
-	
-	
-	
 }
